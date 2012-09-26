@@ -13,8 +13,10 @@
 // 2. TYPOGRAPHY            ==============================
 
 font-size($font-size = 16) {
-  if $font-size is inherit {
-    font-size: inherit
+  if $font-size is 62.5% {
+    font-size: $font-size
+  } else if $font-size is inherit {
+    font-size: $font-size
   } else {
     $rem = ($font-size / 10)
     font-size : $font-size * 1px
