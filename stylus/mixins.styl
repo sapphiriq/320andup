@@ -30,8 +30,66 @@ text-overflow() {
   white-space : nowrap
 }
 
+column-width($width=30em, $gap=3em, $rule=1px solid #333) {
+  -moz-column-width: $width
+  -moz-column-gap: $gap
+  -moz-column-rule: $rule
+  -webkit-column-width: $width
+  -webkit-column-gap: $gap
+  -webkit-column-rule: $rule
+  column-width: $width
+  column-gap: $gap
+  column-rule: $rule
+}
+
+column-break-before($value = 'auto') {
+  -webkit-column-break-before: $value;
+  -moz-column-break-before: $value;
+  column-break-before: $value;
+}
+
+column-count($count=3, $gap=3em, $rule=1px solid #333) {
+  -moz-column-count: $count
+  -moz-column-gap: $gap
+  -moz-column-rule: $rule
+  -webkit-column-count: $count
+  -webkit-column-gap: $gap
+  -webkit-column-rule: $rule
+  column-count: $count
+  column-gap: $gap
+  column-rule: $rule
+}
+
 // 3. COLOUR                ==============================
 // 4. TEXTURE               ==============================
+
+// sprites
+sprite-bg($url, $width, $height) {
+  background: url($url) no-repeat
+  display: inline-block
+  width: $width
+  height: $height
+}
+sprite-pos($left=0, $top=0px) {
+  $left = 0px - $left
+  $top = 0px - $top
+  background-position: $left $top
+}
+sprite($url, $width, $height, $left=0, $top=0) {
+  sprite-bg($url, $width, $height)
+  if ($left > 0) {
+    sprite-pos($left, $top)
+  }
+}
+icon($url, $width=16px, $index=0) {
+  sprite-bg($url, $width, $width)
+  if ($index > 0) {
+    sprite-pos($width*$index, 0)
+  }
+}
+icon-pos($width, $index=0, $top=0px) {
+  sprite-pos($width*$index, $top)
+}
 
 // gradients
 
@@ -84,26 +142,6 @@ rounded($radius = 4px) {
   border-radius : $radius;
 }
 
-// border-radius(VALUE, VALUE, VALUE, VALUE)
-
-border-radius($topright = 0, $bottomright = 0, $bottomleft = 0, $topleft = 0) {
-  -webkit-border-top-right-radius : $topright
-  -webkit-border-bottom-right-radius : $bottomright
-  -webkit-border-bottom-left-radius : $bottomleft
-  -webkit-border-top-left-radius : $topleft
-  -moz-border-radius-topright : $topright
-  -moz-border-radius-bottomright : $bottomright
-  -moz-border-radius-bottomleft : $bottomleft
-  -moz-border-radius-topleft : $topleft
-  border-top-right-radius : $topright
-  border-bottom-right-radius : $bottomright
-  border-bottom-left-radius : $bottomleft
-  border-top-left-radius : $topleft
-  -webkit-background-clip : padding-box
-  -moz-background-clip : padding
-  background-clip : padding-box;
-}
-
 // box-shadow(HORIZONTAL VERTICAL BLUR COLOR))
 
 box-shadow($shadow = 0 1px 3px rgba(0, 0, 0, .25)) {
@@ -131,31 +169,19 @@ opacity($opacity = .5) {
 // rotate(VALUEdeg)
 
 rotate($deg) {
-  -webkit-transform : rotate($deg)
-  -moz-transform : rotate($deg)
-  -ms-transform : rotate($deg)
-  -o-transform : rotate($deg)
-  transform : rotate($deg);
+  transform: unquote("rotate("+ $deg+ ")")
 }
 
 // scale(VALUE)
 
 scale($ratio) {
-  -webkit-transform : scale($ratio)
-  -moz-transform : scale($ratio)
-  -ms-transform : scale($ratio)
-  -o-transform : scale($ratio)
-  transform : scale($ratio);
+  transform : unquote("rotate("+ $ratio+ ")")
 }
 
 // skew(VALUE, VALUE)
 
 skew($x = 0, $y = 0) {
-  -webkit-transform : skew($x, $y)
-  -moz-transform : skew($x, $y)
-  -ms-transform : skew($x, $y)
-  -o-transform : skew($x, $y)
-  transform : skew($x, $y);
+  transform : unquote("skew(" + $x + "," + $y + ")")
 }
 
 // transition(PROPERTY DURATION DELAY(OPTIONAL) TIMING-FINCTION)
@@ -222,53 +248,56 @@ box-sizing($boxsize = border-box) {
 
 // Chrome Frame
 
-chromeframe() { 
+chromeframe() {
   margin : .2em 0
   background : $lightgrey
   color : $black
-  padding : .2em 0;
+  padding : .2em 0
 }
 
 // Contain floats
 
-.clearfix {
+clearfix() {
   *zoom : 1
   &:before,
   &:after {
     display: table
-    content : "";
+    content : ""
   }
   &:after {
-    clear : both;
+    clear : both
   }
+}
+.clearfix {
+  clearfix()
 }
 
 // For image replacement
 
 hide-text() {
-  text-indent : 100%
+  text-indent : 110%
   white-space : nowrap
-  overflow : hidden;
+  overflow : hidden
 }
 
 // Hide from visual and speaking browsers
 
 hidden() {
   display : none !important
-  visibility : hidden;
+  visibility : hidden
 }
 
 // Hide but maintain layout
 
-invisible() { 
-  visibility : hidden;
+invisible() {
+  visibility : hidden
 }
 
 // resize(VALUE) (none, both, horizontal, vertical, inherit)
 
 resize($direction = both) {
   resize : $direction
-  overflow : auto;
+  overflow : auto
 }
 
 // userselect(VALUE) (all, element, none, text)
@@ -277,12 +306,12 @@ user-select($select) {
   -webkit-user-select : $select
   -moz-user-select : $select
   -o-user-select : $select
-  user-select : $select;
+  user-select : $select
 }
 
 // Hidden but available to speaking browsers
 
-visuallyhidden() { 
+visuallyhidden() {
   overflow : hidden
   position : absolute
   clip : rect(0 0 0 0)
@@ -290,22 +319,22 @@ visuallyhidden() {
   width : 1px
   margin : -1px
   padding : 0
-  border : 0;
+  border : 0
 }
 
 // Make visuallyhidden focusable with a keyboard
 
-.visuallyhidden.focusable:active, 
-.visuallyhidden.focusable:focus { 
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
   position : static
   clip : auto
   height : auto
   width : auto
   margin : 0
-  overflow: visible;
+  overflow: visible
 }
 
-// 6. LAYOUT                ============================== 
+// 6. LAYOUT                ==============================
 
 // columns(250px, 0, 24px, COLOR, solid, 1px)
 
